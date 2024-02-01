@@ -38,7 +38,7 @@ public class astar {
    *  Runs astar search on the graph
    */
   public static void aStar(/*graph*/) {
-    //System.out.println(395 * 10.29);
+    System.out.println(395 * 10.29);
     //System.out.println(500 * 7.55);
     PriorityQueue<Integer> queue = new PriorityQueue<>();
     //HashMap<String, Integer> nodes = new HashMap<String, Integer>();
