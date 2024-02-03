@@ -1,4 +1,4 @@
-class node {
+class Node {
 
   private int x;
   private int y;
@@ -10,11 +10,15 @@ class node {
    * 
    * might need to have constructor without heuristic
    */
-  public node (int x, int y, int heuristic) {
+  public Node (int x, int y, int heuristic) {
     this.x = x;
     this.y = y;
     this.heuristic = heuristic;
   }
+
+  public static void getNeighbors() {
+    return;
+  } 
 
 
   public int hashcode() {

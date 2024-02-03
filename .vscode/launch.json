@@ -6,17 +6,23 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Current File",
+      "name": "astar",
       "request": "launch",
-      "mainClass": "${file}",
-      "args": ["terrain.png", "elevation.txt", "path.txt", "output.png"]
+      "mainClass": "astar",
+      "projectName": "lab1_ccf319a2"
     },
     {
       "type": "java",
       "name": "astar",
       "request": "launch",
       "mainClass": "astar",
-      "projectName": "lab1_ccf319a2"
+      "projectName": "lab1_8724084",
+      "args": [
+        "terrain.png",
+        "elevation.txt",
+        "path.txt",
+        "output.png"
+      ]
     }
   ]
 }

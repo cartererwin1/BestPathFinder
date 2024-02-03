@@ -15,69 +15,97 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class astar {
-  
+  public static final double XCONVERSION = 10.29;
+  public static final double YCONVERSION = 7.55;
   /*
    * Create nodes and graph
    */
   public static void buildGraph() {
 
   }
-  public static void makeImage(int x1, int y1, int x2, int y2, Image img) {
+
+
+  /*
+   * Description:
+   * @param x1:
+   * @param x2:
+   * @param y1:
+   * @param y2:
+   * @param img:
+   * @return: distance (meters) traveled
+   */
+  public static double makeImage(int x1, int y1, int x2, int y2, Image img) {
+    double distance = 0;
     Graphics g = img.getGraphics();
-    System.out.println("drawing line from: (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")");
+    g.setColor(java.awt.Color.decode("#763fe7"));
     g.drawLine(x1, y1, x2, y2);
+    // have to change JFrame to go to output file
     JFrame f = new JFrame();
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     f.setVisible(true);
     JLabel label = new JLabel(new ImageIcon(img));
     f.getContentPane().add(label);
     f.pack();
-    }
+    distance = (x2-x1) * XCONVERSION + (y2-y1) * YCONVERSION;
+    return distance;
+  }
 
   /*
    *  Runs astar search on the graph
    */
   public static void aStar(/*graph*/) {
-    System.out.println(395 * 10.29);
-    //System.out.println(500 * 7.55);
-    PriorityQueue<Integer> queue = new PriorityQueue<>();
-    //HashMap<String, Integer> nodes = new HashMap<String, Integer>();
+    HashMap<String, Integer> visited = new HashMap<String, Integer>();
+    PriorityQueue<Integer> frontier = new PriorityQueue<>();
+    /*
+    while(frontier.size() != 0) {
+      //Node current = frontier.pop();
+      //visited.put(current, value???);
+      if(isGoal(current)) {
+        return pathToTop(current);
+      }
+      for(neighbor : current.getNeighbors()) {
+        if(!visited.containsKey(neighbor)) {
+          frontier.addStateIfBetter(neighbor);
+          neighbor.updateParent(current);
+        }
+      }
+    } 
+    */
   }
   
+
   public static void main(String[] args) {
     //Build graph for astar
     //buildGraph needs to return node[]
+    double totalDistance = 0.0;
     buildGraph();
     //Conduct astar algorithm on graph
     aStar();
-
     //print the picture
     File file = new File("src/path.txt");
-        Scanner reader;
-        try {
-            reader = new Scanner(file);
-            int line = 0;
-            int[] xcoords = new int[4];
-            int[] ycoords = new int[4];
-            while(reader.hasNextLine()) {
-                String[] coords = reader.nextLine().strip().split(" ");
-                // x coordinate System.out.println(coords[0]);
-                // y coordinate System.out.println(coords[1]);
-                xcoords[line] = Integer.parseInt(coords[0]);
-                ycoords[line] = Integer.parseInt(coords[1]);
-                line++;
-            }
-            try {
-                BufferedImage image = ImageIO.read(new File("terrain.png"));
-                for(int i = 0; i < line - 1; i++)
-                {
-                    makeImage(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], image);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    Scanner reader;
+    try {
+      reader = new Scanner(file);
+      int line = 0;
+      int[] xcoords = new int[4];
+      int[] ycoords = new int[4];
+      while(reader.hasNextLine()) {
+        String[] coords = reader.nextLine().strip().split(" ");
+        xcoords[line] = Integer.parseInt(coords[0]);
+        ycoords[line] = Integer.parseInt(coords[1]);
+        line++;
+      }
+      try {
+        BufferedImage image = ImageIO.read(new File("terrain.png"));
+        for(int i = 0; i < line - 1; i++) {
+          totalDistance += makeImage(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], image);
         }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    System.out.println("total distance traveled: " + totalDistance);  
   }
 }
