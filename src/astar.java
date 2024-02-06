@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 public class astar {
   public static final double XCONVERSION = 10.29;
   public static final double YCONVERSION = 7.55;
+  public static BufferedImage image;
   /*
    * Create nodes and graph
    */
@@ -34,14 +35,14 @@ public class astar {
    * @param img:
    * @return: distance (meters) traveled
    */
-  public static double makeImage(int x1, int y1, int x2, int y2, BufferedImage img) {
+  public static double drawLine(int x1, int y1, int x2, int y2, String fileString) {
     double distance = 0;
-    Graphics g = img.getGraphics();
+    Graphics g = image.getGraphics();
     g.setColor(java.awt.Color.decode("#763fe7"));
     g.drawLine(x1, y1, x2, y2);
     try {
-      File output = new File("output.png");
-      ImageIO.write(img, "png", output);
+      File output = new File(fileString);
+      ImageIO.write(image, "png", output);
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -72,8 +73,17 @@ public class astar {
     */
   }
   
-
+  
   public static void main(String[] args) {
+    String imageFileName = args[0];
+    String elevationFileName = args[1];
+    String pathFileName = args[2]; 
+    String outputFileName = args[3];
+    try {
+      image = ImageIO.read(new File(imageFileName));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     //Build graph for astar
     //buildGraph needs to return node[]
     double totalDistance = 0.0;
@@ -81,7 +91,7 @@ public class astar {
     //Conduct astar algorithm on graph
     aStar(map);
     //print the picture
-    File file = new File("src/path.txt");
+    File file = new File("src/" + pathFileName);
     Scanner reader;
     try {
       reader = new Scanner(file);
@@ -94,13 +104,8 @@ public class astar {
         ycoords[line] = Integer.parseInt(coords[1]);
         line++;
       }
-      try {
-        BufferedImage image = ImageIO.read(new File("terrain.png"));
-        for(int i = 0; i < line - 1; i++) {
-          totalDistance += makeImage(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], image);
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
+      for(int i = 0; i < line - 1; i++) {
+        totalDistance += drawLine(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], outputFileName);
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
