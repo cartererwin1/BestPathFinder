@@ -1,7 +1,7 @@
 class Node {
 
-  private int x;
-  private int y;
+  private int f;
+  private int g;
   private int heuristic;
 
 
@@ -10,15 +10,13 @@ class Node {
    * 
    * might need to have constructor without heuristic
    */
-  public Node (int x, int y, int heuristic) {
-    this.x = x;
-    this.y = y;
+  public Node (int f, int g, int heuristic) {
+    this.f = f;
+    this.g = g;
     this.heuristic = heuristic;
   }
 
-  public static void getNeighbors() {
-    return;
-  } 
+
 
 
   public int hashcode() {
@@ -29,4 +27,6 @@ class Node {
   public boolean equals(Object other) {
     return false;
   }
+
+  //compareTo
 }

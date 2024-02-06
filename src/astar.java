@@ -34,18 +34,17 @@ public class astar {
    * @param img:
    * @return: distance (meters) traveled
    */
-  public static double makeImage(int x1, int y1, int x2, int y2, Image img) {
+  public static double makeImage(int x1, int y1, int x2, int y2, BufferedImage img) {
     double distance = 0;
     Graphics g = img.getGraphics();
     g.setColor(java.awt.Color.decode("#763fe7"));
     g.drawLine(x1, y1, x2, y2);
-    // have to change JFrame to go to output file
-    JFrame f = new JFrame();
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setVisible(true);
-    JLabel label = new JLabel(new ImageIcon(img));
-    f.getContentPane().add(label);
-    f.pack();
+    try {
+      File output = new File("output.png");
+      ImageIO.write(img, "png", output);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     distance = (x2-x1) * XCONVERSION + (y2-y1) * YCONVERSION;
     return distance;
   }
@@ -53,7 +52,7 @@ public class astar {
   /*
    *  Runs astar search on the graph
    */
-  public static void aStar(/*graph*/) {
+  public static void aStar(area map) {
     HashMap<String, Integer> visited = new HashMap<String, Integer>();
     PriorityQueue<Integer> frontier = new PriorityQueue<>();
     /*
@@ -78,9 +77,9 @@ public class astar {
     //Build graph for astar
     //buildGraph needs to return node[]
     double totalDistance = 0.0;
-    buildGraph();
+    area map = new area(395, 500);
     //Conduct astar algorithm on graph
-    aStar();
+    aStar(map);
     //print the picture
     File file = new File("src/path.txt");
     Scanner reader;
