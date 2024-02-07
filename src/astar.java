@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -84,17 +85,46 @@ public class astar {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+
+    Scanner ereader;
+    File elevationFile = new File(elevationFileName);
+    float[][] elevations = new float[395][500];
+    try {
+      ereader = new Scanner(elevationFile);
+      int y = 0;
+      while(ereader.hasNextLine()) {
+          String[] line = ereader.nextLine().strip().split(" \t");
+          System.out.println(line);
+          //BigDecimal d = new BigDecimal(line[0]);
+          //System.out.println(d);
+          for(int x = 0; x < 1; x++) {
+            //elevations[x][y] = new BigDecimal(line[0]);
+          }
+          y++;
+      }
+      //System.out.println(elevations[0][0]);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
+
     //Build graph for astar
     //buildGraph needs to return node[]
     double totalDistance = 0.0;
     area map = new area(395, 500);
     //Conduct astar algorithm on graph
     aStar(map);
-    //print the picture
-    File file = new File("src/" + pathFileName);
+
+
+
+
+    //this will be removed once astar works
+    File pathfile = new File(pathFileName);
     Scanner reader;
     try {
-      reader = new Scanner(file);
+      reader = new Scanner(pathfile);
       int line = 0;
       int[] xcoords = new int[4];
       int[] ycoords = new int[4];
@@ -104,9 +134,14 @@ public class astar {
         ycoords[line] = Integer.parseInt(coords[1]);
         line++;
       }
+
+
+      // call to drawLine will have to be moved into astar fnc
       for(int i = 0; i < line - 1; i++) {
         totalDistance += drawLine(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], outputFileName);
       }
+
+
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
