@@ -16,16 +16,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class astar {
+
   public static final double XCONVERSION = 10.29;
   public static final double YCONVERSION = 7.55;
   public static BufferedImage image;
-  /*
-   * Create nodes and graph
-   */
-  public static void buildGraph() {
-
-  }
-
+  public static Node goalNode;
+  
 
   /*
    * Description:
@@ -51,35 +47,86 @@ public class astar {
     return distance;
   }
 
+
+  //h(n)
+  public double calculateHeuristic(Node current) {
+    return calculateDist(current, goalNode);
+  }
+
+
+  public double calculateDist(Node current, Node dest) {
+    //add in conversions
+    return Math.sqrt(Math.pow(dest.getX() - current.getX(), 2) + Math.pow(dest.getY() - current.getY(), 2) + Math.pow(dest.getZ() - current.getZ(), 2));
+  }
+
+  //g(n)
+  public double calculateCost(Node current, Node dest) {
+    return calculateCost(current, dest) * current.getTer();
+  }
+
+
   /*
    *  Runs astar search on the graph
    */
   public static void aStar(area map) {
     HashMap<String, Integer> visited = new HashMap<String, Integer>();
-    PriorityQueue<Integer> frontier = new PriorityQueue<>();
+    PriorityQueue<Node> frontier = new PriorityQueue<>();
     /*
     while(frontier.size() != 0) {
-      //Node current = frontier.pop();
-      //visited.put(current, value???);
-      if(isGoal(current)) {
+      
+      Node current = frontier.remove();
+      visited.put(current, );
+      if(current.equals(goalNode)) {
         return pathToTop(current);
       }
-      for(neighbor : current.getNeighbors()) {
+      for(neighbor : map.getNeighbors(current)) {
         if(!visited.containsKey(neighbor)) {
           frontier.addStateIfBetter(neighbor);
           neighbor.updateParent(current);
         }
       }
+
     } 
     */
+  }
+
+  public static Node[][] createNodes(String elevationFileName) {
+    Scanner reader;
+    File elevationFile = new File(elevationFileName);
+    Node[][] nodes = new Node[395][500];
+    try {
+      reader = new Scanner(elevationFile);
+      int y = 0;
+      while(reader.hasNextLine()) {
+          String[] line = reader.nextLine().strip().split("\t");
+          for(int x = 0; x < 395; x++) {
+            //nodes[x][y].setZ(Double.parseDouble(line[0]));
+            //findTerrain method to get what color the img pixel is
+            nodes[x][y] = new Node(x, y, 0.0, Terrain.FOOTPATH);
+          }
+          y++;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return nodes;
   }
   
   
   public static void main(String[] args) {
+
+    //process cmd line args
     String imageFileName = args[0];
     String elevationFileName = args[1];
     String pathFileName = args[2]; 
     String outputFileName = args[3];
+
+    double totalDistance = 0.0;
+
+                //initialize 1st goal node after opening path file
+
+                //update goal node after reaching it
+
     try {
       image = ImageIO.read(new File(imageFileName));
     } catch (IOException e) {
@@ -87,33 +134,11 @@ public class astar {
     }
 
 
-    Scanner ereader;
-    File elevationFile = new File(elevationFileName);
-    float[][] elevations = new float[395][500];
-    try {
-      ereader = new Scanner(elevationFile);
-      int y = 0;
-      while(ereader.hasNextLine()) {
-          String[] line = ereader.nextLine().strip().split(" \t");
-          System.out.println(line);
-          //BigDecimal d = new BigDecimal(line[0]);
-          //System.out.println(d);
-          for(int x = 0; x < 1; x++) {
-            //elevations[x][y] = new BigDecimal(line[0]);
-          }
-          y++;
-      }
-      //System.out.println(elevations[0][0]);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
 
-
-
-    //Build graph for astar
-    //buildGraph needs to return node[]
-    double totalDistance = 0.0;
-    area map = new area(395, 500);
+    
+    //create graph for astar
+    area map = new area(createNodes(elevationFileName));
+                  //change area to a hashmap??? key: x,y tuple value: Node
     //Conduct astar algorithm on graph
     aStar(map);
 
@@ -135,11 +160,6 @@ public class astar {
         line++;
       }
 
-
-      // call to drawLine will have to be moved into astar fnc
-      for(int i = 0; i < line - 1; i++) {
-        totalDistance += drawLine(xcoords[i], ycoords[i], xcoords[i+1], ycoords[i+1], outputFileName);
-      }
 
 
     } catch (FileNotFoundException e) {

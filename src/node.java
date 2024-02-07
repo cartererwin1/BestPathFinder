@@ -1,22 +1,71 @@
+enum Terrain {
+  OPENLAND,
+  ROUGHMEADOW,
+  EASYMOVEMENTFOREST,
+  SLOWRUNFOREST,
+  WALKFOREST,
+  IMPASSIBLEVEGETATION,
+  LAKE,
+  PAVEDROAD,
+  FOOTPATH,
+  OOB
+}
 class Node {
-
-  private int f;
-  private int g;
-  private int heuristic;
+  
+  private int x;
+  private int y;
+  private double z;
+  private Terrain ter;
 
 
   /*
    * Constructor to create node
-   * 
-   * might need to have constructor without heuristic
    */
-  public Node (int f, int g, int heuristic) {
-    this.f = f;
-    this.g = g;
-    this.heuristic = heuristic;
+  public Node (int x, int y, double z, Terrain ter) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.ter = ter;
   }
 
 
+  public int getX() {return this.x;}
+
+
+  public int getY() {return this.y;}
+
+
+  public double getZ() {return this.z;}
+
+  public void setZ(double z) {this.z = z;}
+
+
+  public double getTer() {
+    switch(this.ter) {
+      case OPENLAND: 
+        return .3;
+      case ROUGHMEADOW:
+        return .5;
+      case EASYMOVEMENTFOREST:
+        return .4;
+      case SLOWRUNFOREST:
+        return .6;
+      case WALKFOREST:
+        return .7;
+      case IMPASSIBLEVEGETATION:
+        return .9;
+      case LAKE:
+        return .8;
+      case PAVEDROAD:
+        return .1;
+      case FOOTPATH:
+        return .2;
+      case OOB:
+        return 1;
+      default:
+        return 0;
+    }
+  }
 
 
   public int hashcode() {
@@ -27,6 +76,4 @@ class Node {
   public boolean equals(Object other) {
     return false;
   }
-
-  //compareTo
 }

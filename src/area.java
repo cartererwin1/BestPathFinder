@@ -4,13 +4,11 @@ import java.util.Set;
 import java.util.ArrayList;
 
 class area {
-    private Set<Node> pixels;
-    private Map<Node, Set<Node>> neighbors;
     private Node[][] grid;
 
-    public area(int x, int y) {
+    public area(Node[][] grid) {
         //read in from elevation file
-        this.grid = new Node[x][y];
+        this.grid = grid;
     }
     public Node getNode(int x, int y) {
         return this.grid[x][y];
