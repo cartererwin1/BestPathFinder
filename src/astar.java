@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.color.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -98,11 +99,48 @@ public class astar {
       reader = new Scanner(elevationFile);
       int y = 0;
       while(reader.hasNextLine()) {
-          String[] line = reader.nextLine().strip().split("\t");
+          String[] line = reader.nextLine().strip().split("\\s+");
           for(int x = 0; x < 395; x++) {
-            //nodes[x][y].setZ(Double.parseDouble(line[0]));
+            //System.out.println(Double.parseDouble(eles[0]));
+            int pixel = image.getRGB(x, y);
+            String color = String.format("#%06X", (0xFFFFFF & pixel));
+            Terrain ter;
+            switch(color) {
+              case "#F89412":
+                ter = Terrain.OPENLAND;
+                break;
+              case "#FFC000":
+                ter = Terrain.ROUGHMEADOW;
+                break;
+              case "#FFFFFF":
+                ter = Terrain.EASYMOVEMENTFOREST;
+                break;
+              case "#02D03C":
+                ter = Terrain.SLOWRUNFOREST;
+                break;
+              case "#028828":
+                ter = Terrain.WALKFOREST;
+                break;
+              case "#054918":
+                ter = Terrain.IMPASSIBLEVEGETATION;
+                break;
+              case "#0000FF":
+                ter = Terrain.LAKE;
+                break;
+              case "#473303":
+                ter = Terrain.PAVEDROAD;
+                break;
+              case "#000000":
+                ter = Terrain.FOOTPATH;
+                break;
+              case "#CD0065":
+                ter = Terrain.OOB;
+                break;
+              default:
+                ter = Terrain.OOB;
+            }
             //findTerrain method to get what color the img pixel is
-            nodes[x][y] = new Node(x, y, 0.0, Terrain.FOOTPATH);
+            nodes[x][y] = new Node(x, y, Double.parseDouble(line[x]), ter);
           }
           y++;
       }
@@ -140,6 +178,7 @@ public class astar {
     area map = new area(createNodes(elevationFileName));
                   //change area to a hashmap??? key: x,y tuple value: Node
     //Conduct astar algorithm on graph
+    System.out.println(map.getNode(75, 300));
     aStar(map);
 
 

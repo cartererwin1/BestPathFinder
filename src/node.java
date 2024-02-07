@@ -37,6 +37,7 @@ class Node {
 
   public double getZ() {return this.z;}
 
+  
   public void setZ(double z) {this.z = z;}
 
 
@@ -75,5 +76,9 @@ class Node {
 
   public boolean equals(Object other) {
     return false;
+  }
+
+  public String toString() {
+    return "x=" + this.x + " y =" + this.y + " z=" + this.z;
   }
 }
