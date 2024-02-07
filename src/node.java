@@ -75,7 +75,12 @@ class Node {
 
 
   public boolean equals(Object other) {
-    return false;
+    Node o = (Node) other;
+    if(o.getX() != this.getX() || o.getY() != this.getY() || o.getZ() != this.getZ() || o.getTer() != this.getTer()) {
+      return false;
+    } 
+    return true;
+
   }
 
   public String toString() {

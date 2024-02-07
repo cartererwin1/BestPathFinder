@@ -70,7 +70,7 @@ public class astar {
    *  Runs astar search on the graph
    */
   public static void aStar(area map) {
-    HashMap<String, Integer> visited = new HashMap<String, Integer>();
+    HashMap<Node, Double> visited = new HashMap<Node, Double>();
     PriorityQueue<Node> frontier = new PriorityQueue<>();
     /*
     while(frontier.size() != 0) {
@@ -80,7 +80,7 @@ public class astar {
       if(current.equals(goalNode)) {
         return pathToTop(current);
       }
-      for(neighbor : map.getNeighbors(current)) {
+      for(Node neighbor : map.getNeighbors(current.getX(), current.getY())) {
         if(!visited.containsKey(neighbor)) {
           frontier.addStateIfBetter(neighbor);
           neighbor.updateParent(current);
@@ -176,9 +176,8 @@ public class astar {
     
     //create graph for astar
     area map = new area(createNodes(elevationFileName));
-                  //change area to a hashmap??? key: x,y tuple value: Node
     //Conduct astar algorithm on graph
-    System.out.println(map.getNode(75, 300));
+
     aStar(map);
 
 

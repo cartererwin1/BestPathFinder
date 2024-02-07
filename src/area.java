@@ -17,14 +17,10 @@ class area {
     public Collection<Node> getNeighbors(int x, int y) {
         ArrayList<Node> neighbors = new ArrayList<>();
         //check if out of bounds??
-        neighbors.add(getNode(x+1, y-1));
         neighbors.add(getNode(x+1, y));
-        neighbors.add(getNode(x+1, y+1));
         neighbors.add(getNode(x, y-1));
         neighbors.add(getNode(x, y+1));
-        neighbors.add(getNode(x-1, y-1));
         neighbors.add(getNode(x-1, y));
-        neighbors.add(getNode(x-1, y+1));
         return neighbors;
     }
 }
