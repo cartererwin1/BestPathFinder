@@ -28,6 +28,11 @@ class Node {
     this.ter = ter;
   }
 
+  //add constructor with just x and y
+  public Node (int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 
   public int getX() {return this.x;}
 
@@ -76,7 +81,7 @@ class Node {
 
   public boolean equals(Object other) {
     Node o = (Node) other;
-    if(o.getX() != this.getX() || o.getY() != this.getY() || o.getZ() != this.getZ() || o.getTer() != this.getTer()) {
+    if(o.getX() != this.getX() || o.getY() != this.getY()) {
       return false;
     } 
     return true;

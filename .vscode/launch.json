@@ -9,7 +9,7 @@
       "name": "astar",
       "request": "launch",
       "mainClass": "astar",
-      "projectName": "lab1_134e7c91",
+      "projectName": "lab1-1_79a1a1f5",
       "args": [
         "terrain.png",
         "elevation.txt",
