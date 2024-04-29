@@ -1,6 +1,3 @@
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 import java.util.ArrayList;
 
 class area {
@@ -14,13 +11,29 @@ class area {
         return this.grid[x][y];
     }
 
-    public Collection<Node> getNeighbors(int x, int y) {
+
+    public ArrayList<Node> getNeighbors(int x, int y) {
         ArrayList<Node> neighbors = new ArrayList<>();
-        //check if out of bounds??
-        neighbors.add(getNode(x+1, y));
-        neighbors.add(getNode(x, y-1));
-        neighbors.add(getNode(x, y+1));
-        neighbors.add(getNode(x-1, y));
+        if(x != 394) {
+            neighbors.add(getNode(x+1, y));
+        }
+        if(y !=0) {
+            neighbors.add(getNode(x, y-1));
+        }
+        if(y != 499) {
+            neighbors.add(getNode(x, y+1));
+        }
+        if(x != 0) {
+            neighbors.add(getNode(x-1, y));
+        }
         return neighbors;
+    }
+
+    public void resetParents() {
+        for(int x = 0; x < 395; x++) {
+            for(int y = 0; y < 500; y++) {
+                getNode(x,y).setParent(null);
+            }
+        }
     }
 }
