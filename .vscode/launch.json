@@ -6,10 +6,10 @@
   "configurations": [
     {
       "type": "java",
-      "name": "lab1",
+      "name": "bestpathfinder",
       "request": "launch",
-      "mainClass": "lab1",
-      "projectName": "lab1_ccf319a2",
+      "mainClass": "bestpathfinder",
+      "projectName": "BestPathFinder_9e1cb9dc",
       "args": [
         "terrain.png",
         "elevation.txt",

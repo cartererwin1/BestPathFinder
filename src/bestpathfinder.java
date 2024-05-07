@@ -14,7 +14,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class lab1 {
+public class bestpathfinder {
   public static final double XCONVERSION = 10.29;
   public static final double YCONVERSION = 7.55;
   public static BufferedImage image;
@@ -22,21 +22,16 @@ public class lab1 {
   
 
   /*
-   * Description:
-   * @param x1:
-   * @param x2:
-   * @param y1:
-   * @param y2:
-   * @param img:
-   * @return: distance (meters) traveled
+   * Description: draws a line on an image from one node to another
+   * @param src: the node the line will be drawn from (if the image is paper this is where a pen is placed)
+   * @param dest: the node where the line will finish (if the image is paper this is where the pen would be lifted)
+   * @param fileString: the file containing the image to be drawn on
+   * @return: the 3D distance between the nodes
    */
   public static double drawLine(Node src, Node dest, String fileString) {
-    //System.out.println("drawing from:" + src + " to " + dest);
     double distance = 0;
     Graphics g = image.getGraphics();
-    
     g.setColor(java.awt.Color.RED);
-    //g.setColor(java.awt.Color.decode("#763fe7"));
     g.drawLine(src.getX(), src.getY(), dest.getX(), dest.getY());
     try {
       File output = new File(fileString);
@@ -49,12 +44,22 @@ public class lab1 {
   }
 
 
-  //h(n)
+  /*
+   * Description: calculates h(node) given a node. This represents the distance from the node to the goal
+   * @param current: the node the value is being calculate for
+   * @return: the h value of the node
+   */
   public static double calculateHeuristic(Node current) {
     return calculateDist(current, currentGoal) * .1;
   }
 
 
+  /*
+   * Description: calculates the 3D distance between two nodes
+   * @param current: the starting node
+   * @param dest: the ending node
+   * @return: the 3D distance between the nodes
+   */
   public static double calculateDist(Node current, Node dest) {
     double xdelta = Math.pow((current.getX() - dest.getX()) * XCONVERSION,2);
     double ydelta = Math.pow((current.getY() - dest.getY()) * YCONVERSION,2);
@@ -62,11 +67,25 @@ public class lab1 {
     return Math.sqrt(xdelta + ydelta + zdelta);
   }
 
-  //g(n)
+
+  /*
+   * Description: calculates the cost (g(node)) to travel from current to dest
+   * @param current: the starting node
+   * @param dest: the node to be moved to
+   * @return: the g value of the movement which would be the 3D distance multiplied by the terrain value
+   */
   public static double calculateCost(Node current, Node dest) {
     return calculateDist(current, dest) * current.getTer() + current.getG();
   }
 
+
+  /*
+   * Description: after a goal is reached recurse backwards to get the path that was taken to get to the goal.
+   * @param startNode: the starting node
+   * @param map: the map containing all parent data for nodes.
+   * @param end: the ending node
+   * @return: a list of Nodes that represents the best path calculated by A*
+   */
   public static ArrayList<Node> pathToTop(Node startNode, HashMap<Node, Node> map, Node end) {
     Node child = end;
     ArrayList<Node> path = new ArrayList<>();
@@ -105,7 +124,6 @@ public class lab1 {
     frontier.add(startNode);
 
     while(frontier.size() != 0) {
-      //System.out.println("yes");
       Node current = frontier.remove();
       if(visited.contains(current)) {
         continue;
@@ -145,7 +163,11 @@ public class lab1 {
     return null;
   }
 
-
+  /*
+   * Description: created a 2D array of nodes that will be 395x500, each node representing a pixel in the image 
+   * @param elevationFileName: the file containing the Z values of all pixels.
+   * @return: 2D array of nodes representing the pixels of the image.
+  */
   public static Node[][] createNodes(String elevationFileName) {
     Scanner reader;
     File elevationFile = new File(elevationFileName);
@@ -217,8 +239,6 @@ public class lab1 {
     area map = new area(createNodes(elevationFileName));
     //Conduct astar algorithm on graph
     ArrayList<Node> aStarPath = new ArrayList<Node>();
-    
-
     File pathFile = new File(pathFileName);
     Scanner pathReader;
     ArrayList<Node> goalNodes = new ArrayList<Node>();
@@ -241,9 +261,7 @@ public class lab1 {
     }
     //draw the path returned by aStar on the output image
     for(int i = 0; i < aStarPath.size() - 1; i++) {
-        //System.out.println(aStarPath.get(i).getX() +", " + aStarPath.get(i).getY());
         totalDistance += drawLine(aStarPath.get(i), aStarPath.get(i+1), outputFileName);
-        //System.out.println("step:" + aStarPath.get(i).getX() +","+ aStarPath.get(i).getY());
     }
     System.out.println("total distance traveled: " + totalDistance);  
   }
